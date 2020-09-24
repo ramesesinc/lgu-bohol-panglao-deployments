@@ -1,3 +1,14 @@
+CREATE TABLE `account_incometarget` (
+  `objid` varchar(50) NOT NULL,
+  `itemid` varchar(50) NOT NULL,
+  `year` int(11) NOT NULL,
+  `target` decimal(16,2) NOT NULL,
+  PRIMARY KEY (`objid`),
+  KEY `ix_itemid` (`itemid`),
+  KEY `ix_year` (`year`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+;
+
 alter table account_incometarget add CONSTRAINT `fk_account_incometarget_itemid` 
    FOREIGN KEY (`itemid`) REFERENCES `account` (`objid`)
 ;
@@ -23,10 +34,10 @@ CREATE TABLE `business_closure` (
 ; 
 */
 
--- create UNIQUE index `uix_code` on businessrequirementtype (`code`); 
--- create UNIQUE index `uix_title` on businessrequirementtype (`title`); 
+create UNIQUE index `uix_code` on businessrequirementtype (`code`); 
+create UNIQUE index `uix_title` on businessrequirementtype (`title`); 
 
--- create UNIQUE index `uix_name` on businessvariable (`name`);
+create UNIQUE index `uix_name` on businessvariable (`name`);
 
 CREATE TABLE `cashreceipt_group` ( 
    `objid` varchar(50) NOT NULL, 
@@ -63,7 +74,7 @@ CREATE TABLE `cashreceipt_plugin` (
 ; 
 
 
--- create unique index uix_receiptid on cashreceipt_void (receiptid); 
+create unique index uix_receiptid on cashreceipt_void (receiptid); 
 
 alter table collectiontype add info text null 
 ; 
@@ -76,9 +87,9 @@ CREATE TABLE `entity_mapping` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ; 
 
--- alter table lob add _ukey varchar(50) not null default '';
--- update lob set _ukey=objid where _ukey='';
--- create unique index uix_name on lob (name, _ukey);
+alter table lob add _ukey varchar(50) not null default '';
+update lob set _ukey=objid where _ukey='';
+create unique index uix_name on lob (name, _ukey);
 
 DROP TABLE IF EXISTS `paymentorder`
 ;
@@ -163,5 +174,6 @@ CREATE TABLE `sync_data_pending` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 ; 
 
-
--- CREATE UNIQUE INDEX `uix_ruleset_name` ON sys_rule (`ruleset`,`name`);
+alter table sys_rule add _ukey varchar(50) not null default '';
+update sys_rule set _ukey=objid where _ukey='';
+CREATE UNIQUE INDEX `uix_ruleset_name` ON sys_rule (`ruleset`,`name`,`_ukey`);

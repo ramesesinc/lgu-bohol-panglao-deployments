@@ -33,6 +33,9 @@ where aa.objid = bb.objid
 ;
 
 
+alter table sys_usergroup_permission modify objid varchar(100) not null 
+;
+
 insert into sys_usergroup_permission (
 	objid, usergroup_objid, object, permission, title 
 ) values ( 
