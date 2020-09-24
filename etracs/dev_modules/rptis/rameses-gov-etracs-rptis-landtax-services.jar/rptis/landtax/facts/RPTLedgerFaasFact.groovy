@@ -6,9 +6,6 @@ import java.math.*
 public class RPTLedgerFaasFact
 {
     String objid 
-    String tdno
-    Classification classification 
-    ActualUse actualuse 
     String classificationid
     String actualuseid
     Integer fromyear
@@ -16,7 +13,6 @@ public class RPTLedgerFaasFact
     Integer toyear
     Integer toqtr
     Double assessedvalue
-    Boolean idleland
 
     def entity
 
@@ -28,17 +24,13 @@ public class RPTLedgerFaasFact
         this.assessedvalue = 0.0;
     }
 
-    public RPTLedgerFaasFact(ledgerfaas, classification, actualuse){
-        this.tdno = ledgerfaas.tdno
+    public RPTLedgerFaasFact(ledgerfaas){
         this.classificationid = ledgerfaas.classification?.objid
         this.actualuseid = ledgerfaas.actualuse?.objid
         this.fromyear = ledgerfaas.fromyear;
         this.fromqtr = ledgerfaas.fromqtr;
-        this.toyear = ledgerfaas.toyear == 0 ?  9999 : ledgerfaas.toyear;
-        this.toqtr = ledgerfaas.toqtr == 0 ? 4 : ledgerfaas.toqtr;
+        this.toyear = ledgerfaas.toyear;
+        this.toqtr = ledgerfaas.toqtr;
         this.assessedvalue = ledgerfaas.assessedvalue;
-        this.classification = new Classification(ledgerfaas.classification);
-        this.actualuse = new ActualUse(ledgerfaas.actualuse);
-        this.idleland = (ledgerfaas.idleland ? ledgerfaas.idleland : false)
     }
 }

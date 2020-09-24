@@ -12,9 +12,6 @@ class SubdivisionWorkflowService extends ActiveWorkflowService
 	@ActiveDB('subdivision_task')
 	def taskDB;
 
-	@DataContext('subdivision_task')
-	def em_task
-
 	@Service('NotificationService')
 	def notificationService
 
@@ -28,15 +25,6 @@ class SubdivisionWorkflowService extends ActiveWorkflowService
 	public def findReturnToInfo( param ) {
 		return taskDB.findReturnToInfo(param)	
 	}
-
-
-	public void beforeSignal(param) {
-		if (param.action?.matches('send.*')) {
-			def task = em_task.select('returnedby').find([objid: param.taskid]).first()
-			if (!task) throw new Exception('Task ' + param.taskid + ' does not exist or has been deleted.')
-			env.task = [returnedby: task.returnedby]
-		}
-	}	
 
 
 	public void beforeCreateTask(task) {
@@ -57,7 +45,6 @@ class SubdivisionWorkflowService extends ActiveWorkflowService
 
 			env.returnto = returnto.assignee
 			task.assignee = assignee
-			task.returnedby = env.prevtask.state
 		}
 		else if ( ! task.state.toLowerCase().matches('assign.*')){
 			task.assignee = assignee
@@ -85,7 +72,7 @@ class SubdivisionWorkflowService extends ActiveWorkflowService
 	}
 
 	public void afterLoadTask(Object newTask) {
-		newTask.transitions.findAll{ it.action.toString().matches('submit.*|send.*')}.each{t ->
+		newTask.transitions.findAll{ it.action.toString().matches('submit.*')}.each{t ->
 			if (t.properties?.targetrole) {
 				def params = [role: t.properties.targetrole]
 				t.assignees = taskDB.getTargetAssignees(params)
@@ -95,14 +82,12 @@ class SubdivisionWorkflowService extends ActiveWorkflowService
 
 	public void beforeCloseTask(task) {
 		if (env.data.manualapprover){
-			task.enddate = env.data.manualapprover.dtsigned
 			task.actor = env.data.manualapprover
 		}
 	}
 
 	public void afterCloseTask(task) {
 		if (!task.state.matches('assign.*')){
-			env.data._taskid = task.objid
         	subdivisionSvc.insertFaasSignatories(env.data)
 		}
 		subdivisionSvc.updateSignatories(task)

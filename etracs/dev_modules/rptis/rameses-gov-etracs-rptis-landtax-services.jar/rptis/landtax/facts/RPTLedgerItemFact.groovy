@@ -7,7 +7,6 @@ public class RPTLedgerItemFact
 {
     RPTLedgerFact ledger 
     String objid 
-    String rptledgerfaasid
     Integer year
     Integer qtr
     Double av
@@ -21,8 +20,6 @@ public class RPTLedgerItemFact
     Integer monthsfromqtr
     Integer monthsfromjan
     Integer priority
-    Integer fromqtr
-    Integer toqtr
     Boolean backtax
     Boolean idleland
     Boolean reclassed
@@ -52,7 +49,6 @@ public class RPTLedgerItemFact
         this.ledger = ledgerfact
         this.entity = item 
         this.objid = item.objid 
-        this.rptledgerfaasid = item.rptledgerfaas?.objid
         this.year = item.year
         this.qtr = item.qtr
         this.av = item.av
@@ -65,8 +61,6 @@ public class RPTLedgerItemFact
         this.monthsfromqtr = item.monthsfromqtr
         this.monthsfromjan = item.monthsfromjan
         this.priority = item.priority
-        this.fromqtr = item.fromqtr
-        this.toqtr = item.toqtr
         this.backtax = item.backtax
         this.idleland = item.idleland
         this.reclassed = item.reclassed

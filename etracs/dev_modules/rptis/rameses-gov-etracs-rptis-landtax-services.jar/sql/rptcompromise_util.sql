@@ -1,32 +1,36 @@
 [findCompromiseByTxnno]
-select * from rptcompromise where txnno = $P{txnno}
+select * from rptledger_compromise where txnno = $P{txnno}
 
 
 [resetPayment]
-update rptcompromise_item set 
-	amtpaid = 0,
-	interestpaid = 0
-where parentid = $P{objid}	
+update rptledger_compromise_item set 
+	basicpaid = 0,
+	basicintpaid = 0,
+	basicidlepaid = 0,
+	sefpaid = 0,
+	sefintpaid = 0,
+	firecodepaid = 0,
+	basicidleintpaid = 0,
+	fullypaid = 0
+where rptcompromiseid = $P{objid}	
 
 
 [findPayment]
-select sum(amount) as amtpaid 
-from rptcompromise_credit c 
-left join cashreceipt_void cv on c.receiptid = cv.objid 
-where parentid = $P{objid}
-and cv.objid is null 
-and c.remarks not like '%current%'
+select (amtpaid + downpayment) as amtpaid from rptledger_compromise where objid = $P{objid}
 
 
 [getItems]
-select objid, year, amount, interest, amount + interest as total
-from rptcompromise_item 
-where parentid = $P{objid}
-order by year, priority
+select 
+	objid, year, qtr,
+	basic, basicint, basicidle, sef, sefint, firecode, basicidleint,
+	(basic + basicint + basicidle + sef + sefint + firecode + basicidleint) as total
+from rptledger_compromise_item 
+where rptcompromiseid = $P{objid}
+order by year, qtr 
 
 
 [updateFullyPaidItem]
-update rptcompromise_item set 
+update rptledger_compromise_item set 
 	basicpaid = basic,
 	basicintpaid = basicint,
 	basicidlepaid = basicidle,
@@ -38,7 +42,7 @@ update rptcompromise_item set
 where objid = $P{objid}	
 
 [updatePartialledItem]
-update rptcompromise_item set 
+update rptledger_compromise_item set 
 	basicpaid = $P{basicpaid},
 	basicintpaid = $P{basicintpaid},
 	basicidlepaid = $P{basicidlepaid},

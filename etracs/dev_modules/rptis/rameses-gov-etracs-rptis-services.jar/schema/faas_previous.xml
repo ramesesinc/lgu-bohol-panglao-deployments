@@ -13,6 +13,5 @@
 		<field name="prevareasqm" />
 		<field name="prevareaha" />
 		<field name="preveffectivity" />
-		<field name="prevtaxability" />
 	</element>
 </schema>

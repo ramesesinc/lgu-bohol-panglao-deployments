@@ -21,16 +21,4 @@ public class Classification
             name: name,
         ]
     }
-
-    public boolean equals(other)  {
-        if (!(other instanceof Classification)) {
-            return false;
-        }
-        return this.objid.equals(other.objid);
-
-    }
-
-    public int hashCode() {
-        return objid.hashCode();
-    }
 }

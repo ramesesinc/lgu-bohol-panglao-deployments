@@ -76,7 +76,6 @@ FROM rptpayment rp
 	INNER JOIN sys_org pct ON pct.objid = md.parent_objid
 where rp.receiptid = $P{objid}  
 group by 
-	rl.objid,
 	rl.owner_name, 
 	rl.tdno,
 	rl.rputype,
@@ -92,18 +91,3 @@ group by
 	rp.fromqtr, 
 	rp.toyear,
 	rp.toqtr	
-
-
-[getPaidLedgers]
-select 
-	rl.objid, 
-	rl.tdno, 
-	rl.fullpin, 
-	rl.owner_name, 
-	rl.totalav,
-	rl.lastyearpaid,
-	rl.lastqtrpaid
-from rptpayment rp 
-inner join rptledger rl on rp.refid = rl.objid 
-where rp.receiptid = $P{objid}
-order by rl.tdno 

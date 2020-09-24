@@ -12,7 +12,6 @@ VALUES
 SELECT 
 	rci.*,
 	rl.objid as rptledgerid, 
-	rl.faasid,
 	rl.tdno,
 	rl.rputype,
 	rl.fullpin ,
@@ -29,7 +28,6 @@ SELECT
 	rl.classcode,
 	pc.name as classification, 
 	rl.titleno,
-	rl.taxable,
 	rp.surveyno,
     f.effectivityyear
 FROM rptcertificationitem rci 
@@ -73,9 +71,9 @@ WHERE rl.state = 'APPROVED'
 
 [getPaymentInfo]
 select 
-    rl.objid AS rptledgerid, 
-    rp.receiptno AS orno,
-    rp.receiptdate AS ordate,
+    rl.objid as rptledgerid, 
+    xr.receiptno as orno,
+    xr.txndate as ordate,
     SUM(ri.amount + ri.interest - ri.discount) AS oramount,
     SUM(CASE WHEN ri.revtype = 'basic' THEN ri.amount ELSE 0 END) AS basic,
     SUM(CASE WHEN ri.revtype = 'basic' THEN ri.discount ELSE 0 END) AS basicdisc,
@@ -96,35 +94,15 @@ from rptcertificationitem rci
     inner join rptledger rl on rci.refid = rl.objid 
     inner join rptpayment rp on rl.objid  = rp.refid 
     inner join rptpayment_item ri on rp.objid = ri.parentid
-    LEFT JOIN cashreceipt_void cv ON rp.receiptid = cv.receiptid 
+    inner join cashreceipt xr on rp.receiptid = xr.objid 
+    left join cashreceipt_void cv on xr.objid = cv.receiptid  
 where rci.rptcertificationid = $P{rptcertificationid}
     and rl.objid = $P{rptledgerid}
   and (ri.year = $P{year} and ri.qtr <= $P{qtr}) 
   and cv.objid is null 
-GROUP BY rl.objid, rp.receiptno, rp.receiptdate, ri.year
+group by rl.objid, xr.receiptno, xr.txndate, ri.year
 
 [findPaidClearance]
 select objid, txnno
 from rptcertification 
 where orno = $P{orno}
-
-
-[getTaxClearancesIssued]
-select 
-	c.objid,
-	c.txnno,
-	c.txndate,
-	c.taxpayer_objid,
-	c.requestedby,
-	c.requestedbyaddress,
-	c.purpose,
-	c.official,
-	c.orno,
-	c.ordate,
-	c.oramount,
-	t.year, 
-	t.qtr 
-from rpttaxclearance t 
-inner join rptcertification c on t.objid = c.objid 
-inner join rptcertificationitem i on c.objid = i.rptcertificationid
-where i.refid = $P{objid}
