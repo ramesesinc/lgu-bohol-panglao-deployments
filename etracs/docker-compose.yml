@@ -21,6 +21,9 @@ services:
       - "8070:8070"
       - "8080:8080"
     volumes:
+      - ../_res/timezone:/etc/timezone
+      - ../_res/zoneinfo:/usr/share/zoneinfo
+      - ../_res/zoneinfo/Asia/Manila:/etc/localtime
       - ../_res/connections:/apps/etracs25/connections/ext
       - ./modules:/apps/etracs25/modules
 

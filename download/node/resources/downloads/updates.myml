@@ -49,14 +49,14 @@ app:
     # treasury
     - { order: 220, version: 2.51, file: "modules/treasury/rameses-treasury-common.jar" }
     - { order: 221, version: 2.51, file: "modules/treasury/rameses-gov-depositslip.jar" }
-    - { order: 222, version: 2.51, file: "modules/treasury/rameses-gov-treasury.jar" }
+    - { order: 222, version: 2.52, file: "modules/treasury/rameses-gov-treasury.jar" }
     - { order: 223, version: 2.51, file: "modules/treasury/rameses-gov-treasury-report.jar" }
     - { order: 224, version: 2.51, file: "modules/treasury/rameses-gov-treasury-tool.jar" }
     # epayment
     - { order: 230, version: 2.51, file: "modules/epayment/rameses-gov-epayment.jar" }
     - { order: 231, version: 2.51, file: "modules/epayment/rameses-gov-epayment-report.jar" }
     # rptis
-    - { order: 240, version: 2.51, file: "modules/rptis/rameses-gov-etracs-rptis-landtax.jar" }
+    - { order: 240, version: 2.52, file: "modules/rptis/rameses-gov-etracs-rptis-landtax.jar" }
     - { order: 241, version: 2.51, file: "modules/rptis/rameses-gov-etracs-rptis-landtax-report.jar" }
     - { order: 242, version: 2.51, file: "modules/rptis/rameses-gov-etracs-rptis.jar" }
     - { order: 243, version: 2.51, file: "modules/rptis/rameses-gov-etracs-rptis-report.jar" }
